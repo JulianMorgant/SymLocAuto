@@ -44,7 +44,7 @@ class UsersController extends AbstractController
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      * @throws \Exception
      */
-    public function viewUser(User $user,ConsumerRepository $repoClient,Request $request,ObjectManager $manager)
+    public function viewUser(User $user,Request $request,ObjectManager $manager)
     {
         $forms=[];
         $form = $this->createFormBuilder($user) //TODO
@@ -58,6 +58,7 @@ class UsersController extends AbstractController
                 'empty_data' => 'mail'],[
                 'disable'   => false,
             ])
+            ->add('account',TextType::class)
             ->add('createAt',DateType::class,[
                 'required'   => true,
                 'empty_data' => ''],[
@@ -118,6 +119,7 @@ class UsersController extends AbstractController
             ->add('pseudo',TextType::class)
             ->add('psw',PasswordType::class)
             ->add('mail',EmailType::class)
+            ->add('account',TextType::class)
             ->add('save',SubmitType::class,['label'=>'valider'])
             ->getForm();
 
@@ -150,7 +152,7 @@ class UsersController extends AbstractController
      */
     public function newClient(Request $request, ObjectManager $manager)
     {
-        $newClient = new Client();
+        $newClient = new Consumer();
 
         $form = $this->createFormBuilder($newClient)
             ->add('name',TextType::class)
@@ -217,6 +219,8 @@ class UsersController extends AbstractController
 
         return $this->render('users/view.html.twig',[
             'forms' => $forms,
+            'user' => $_SESSION['user'],
+            'account' => $_SESSION['account'],
         ]);
     }
 

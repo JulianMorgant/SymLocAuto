@@ -29,8 +29,15 @@ class User
     private $mail;
 
     /**
+     * @ORM\Column(type="string", length=5)
+     */
+    private $account;
+
+    /**
      * @ORM\Column(type="string", length=20)
      */
+
+
     private $psw;
 
     /**
@@ -78,6 +85,18 @@ class User
     public function setMail(string $mail): self
     {
         $this->mail = $mail;
+
+        return $this;
+    }
+
+    public function getAccount(): ?string
+    {
+        return $this->account;
+    }
+
+    public function setAccount(string $account): self
+    {
+        $this->account = $account;
 
         return $this;
     }
