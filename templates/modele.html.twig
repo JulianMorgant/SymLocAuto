@@ -62,6 +62,18 @@
                             </ul>
                         </li>
                     </ul>
+                    {% if(user) %}
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a>
+                                User : {{ user }}
+                            </a>
+                        </li>
+                    </ul>
+                    {% endif %}
+
+
+
                     <form class="navbar-form navbar-left" role="search">
                         <div class="form-group">
                             <input type="text" class="form-control" placeholder="Search">
@@ -70,7 +82,7 @@
                     </form>
                     <ul class="nav navbar-nav navbar-right">
                         {% if(user) %}
-                            <li><a>user : {{ user }} </a><a href="{{ path('logout')}}">Déconnexion</a></li>
+                            <li><a href="{{ path('logout')}}">Déconnexion</a></li>
                         {% else %}
                             <li><a href="{{ path('login')}}">Connexion</a></li>
                         {% endif %}

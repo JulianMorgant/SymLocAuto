@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Tests\Extension\DependencyInjection\TestTypeExtension;
@@ -31,13 +32,14 @@ class LoginController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $form->getData();
-            $testUser = $repoUser->findByPseudo($user);
+            $testUser = $repoUser->findOneByPseudo($user->getPseudo());
             if ($testUser != null && $testUser->getPsw() == $user->getPsw()) {
                 //OK login
                 $_SESSION['user'] = $testUser->getPseudo();
                 $_SESSION['account'] = $testUser->getAccount();
+                $_SESSION['userId'] = $testUser->getId();
             }else{
-                //KO login
+                //KO login //TODO
 
             }
             return $this->redirectToRoute('home');
@@ -46,9 +48,6 @@ class LoginController extends AbstractController
         $forms[0]=$form->createView();
         return $this->render('login/index.html.twig',[
             'forms' => $forms,
-        ]);
-
-        return $this->render('login/index.html.twig', [
             'controller_name' => 'LoginController',
             'user' => isset($_SESSION['user'])?$_SESSION['user']:null,
             'account' => isset($_SESSION['account'])?$_SESSION['account']:null,
@@ -62,6 +61,11 @@ class LoginController extends AbstractController
     public function logout(){
         unset($_SESSION['user']);
         unset($_SESSION['account']);
-
+        unset($_SESSION['userId']);
+        return $this->render('home/index.html.twig', [
+            'controller_name' => 'LoginController',
+            'user' => isset($_SESSION['user'])?$_SESSION['user']:null,
+            'account' => isset($_SESSION['account'])?$_SESSION['account']:null,
+        ]);
     }
 }
