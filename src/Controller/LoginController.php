@@ -21,10 +21,12 @@ class LoginController extends AbstractController
     public function login(Request $request,UserRepository $repoUser)
     {
         $user = new User();
-
+        $user
+            ->setMail('lo@g.in')
+            ->setAccount('user');
         $form = $this->createFormBuilder($user)
-            ->add("pseudo",TextType::class)
-            ->add("psw",PasswordType::class)
+            ->add("pseudo",TextType::class,['label'=>'Pseudo'])
+            ->add("psw",PasswordType::class,['label'=>'Mot de Passe'])
             ->add('submit',SubmitType::class,['label'=>'Connexion'])
             ->getForm();
 

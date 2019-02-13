@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
@@ -20,21 +21,50 @@ class User
 
     /**
      * @ORM\Column(type="string", length=20)
+     * @Assert\Length(
+     *     min = "4",
+     *     max = "20",
+     *     minMessage = "4 caractères minimum",
+     *     maxMessage = "20 caractères max"
+     *     )
+     * @Assert\NotBlank
      */
     private $pseudo;
 
     /**
      * @ORM\Column(type="string", length=50)
+     * @Assert\Email(message = " '{{ value }}' n'est pas un mail valide." )
+     * @Assert\Length(
+     *     min = "4",
+     *     max = "50",
+     *     minMessage = "4 caractères minimum",
+     *     maxMessage = "50 caractères max"
+     *     )
+     * @Assert\NotBlank
      */
+
     private $mail;
 
     /**
      * @ORM\Column(type="string", length=5)
+     * @Assert\Choice(
+     *     choices = { "admin", "user" },
+     *     message = "Choose a valid account type (admin or user)."
+     * )
+     * @Assert\NotBlank
+     *
      */
     private $account;
 
     /**
      * @ORM\Column(type="string", length=20)
+     * @Assert\Length(
+     *     min = "4",
+     *     max = "50",
+     *     minMessage = "4 caractères minimum",
+     *     maxMessage = "20 caractères max"
+     *     )
+     * @Assert\NotBlank
      */
 
 

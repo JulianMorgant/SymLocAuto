@@ -11,11 +11,21 @@
     <div class="example-wrapper">
         {% for form in forms %}
             <div>
-                {{ form_start(form) }}
+                {{ form_start(form, {attr: {novalidate: 'novalidate'}}) }}
                 {{ form_widget(form) }}
                 {{ form_end(form) }}
             </div>
         {% endfor %}
 
     </div>
+{% endblock %}
+{% block javascripts %}
+<script>
+    window.onload = function() {
+        const myInput = document.getElementById('form_psw');
+        myInput.onpaste = function(e) {
+            e.preventDefault();
+        }
+    }
+</script>
 {% endblock %}

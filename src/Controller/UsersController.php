@@ -80,16 +80,12 @@ class UsersController extends AbstractController
         $consumers = $user->getConsumers();
 
         foreach ($consumers as $consumer) {
-            var_dump($consumer);
-
             $form = $this->createFormBuilder($consumer)
                 ->add('name', TextType::class)
                 ->add('firstname', TextType::class)
                 ->add('address', TextareaType::class)
                 ->getForm();
-
             array_push($forms, $form->createView());
-
         }
 
         return $this->render('users/view.html.twig', [
@@ -190,10 +186,12 @@ class UsersController extends AbstractController
     /**
      *
      * @Route("/viewUsers",name="viewUsers")
-     *
+     * @param UserRepository $repoUser
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
 
-    public function viewUsers(UserRepository $repoUser, Request $request, ObjectManager $manager)
+    public function viewUsers(UserRepository $repoUser, Request $request)
     {
         $forms = [];
         $users = $repoUser->findAll();
@@ -211,7 +209,6 @@ class UsersController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
-            var_dump($data);
             return $this->redirectToRoute('adminPseudo', ['pseudo' => $data['users']]);
         }
 
@@ -223,7 +220,9 @@ class UsersController extends AbstractController
             'account' => isset($_SESSION['account']) ? $_SESSION['account'] : null,
         ]);
 
+
     }
+
 
 }
 
