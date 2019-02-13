@@ -20,8 +20,6 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Validator\Constraints\DateTime;
 
 
-
-
 /**
  * Class LoginController
  * @package App\Controller
@@ -55,10 +53,10 @@ class UsersController extends AbstractController
         $form = $this->createFormBuilder($user)//TODO
         ->add('pseudo', TextType::class, [
             'required' => true,
-            'empty_data' => 'pseudo'] )
+            'empty_data' => 'pseudo'])
             ->add('mail', EmailType::class, [
                 'required' => true,
-                'empty_data' => 'mail'] )
+                'empty_data' => 'mail'])
             ->add('account', TextType::class)
             ->add('createAt', DateType::class)
             ->add('modifyAt', DateType::class)
@@ -81,8 +79,9 @@ class UsersController extends AbstractController
 
         $consumers = $user->getConsumers();
 
-        //  if (count($consumers) > 0) {
         foreach ($consumers as $consumer) {
+            var_dump($consumer);
+
             $form = $this->createFormBuilder($consumer)
                 ->add('name', TextType::class)
                 ->add('firstname', TextType::class)
@@ -90,18 +89,17 @@ class UsersController extends AbstractController
                 ->getForm();
 
             array_push($forms, $form->createView());
+
         }
-        //}
-        return
 
-
-            $this->render('users/view.html.twig', [
-                'forms' => $forms,
-                'user' => isset($_SESSION['user']) ? $_SESSION['user'] : null,
-                'account' => isset($_SESSION['account']) ? $_SESSION['account'] : null,
-            ]);
+        return $this->render('users/view.html.twig', [
+            'forms' => $forms,
+            'user' => isset($_SESSION['user']) ? $_SESSION['user'] : null,
+            'account' => isset($_SESSION['account']) ? $_SESSION['account'] : null,
+        ]);
 
     }
+
 
     /**
      * @Route("/newUser", name="newUser")
@@ -146,6 +144,7 @@ class UsersController extends AbstractController
     /**
      *
      * @Route("/newClient",name="newClient")
+     * @param UserRepository $repo
      * @param Request $request
      * @param ObjectManager $manager
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
