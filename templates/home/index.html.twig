@@ -35,4 +35,21 @@
 
 
     </div>
+
+    <div >
+        <ul class="pagination d-flex justify-content-center">
+            <li class="page-item {% if pageCourante == 1 %} disabled {% endif %}">
+                <a class="page-link" href="{{ path('home',{'page' : pageCourante-1 }) }}">&laquo;</a>
+            </li>
+            {% for i in 1..nbDePages  %}
+            <li class="page-item {% if i == pageCourante %} active {% endif %}">
+                <a class="page-link" href="{{ path('home',{'page' : i }) }}">{{ i }}</a>
+            </li>
+            {% endfor %}
+            <li class="page-item {% if pageCourante >= nbDePages %} disabled {% endif %}">
+                <a class="page-link" href="{{ path('home',{'page' : pageCourante+1 }) }}">&raquo;</a>
+            </li>
+        </ul>
+    </div>
+
 {% endblock %}
