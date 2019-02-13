@@ -101,10 +101,11 @@ class UsersController extends AbstractController
      * @Route("/newUser", name="newUser")
      * @param Request $request
      * @param ObjectManager $manager
+     * @param UserRepository $user
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      * @throws \Exception
      */
-    public function newUser(Request $request, ObjectManager $manager)
+    public function newUser(Request $request, ObjectManager $manager,UserRepository $userRepository)
     {
         $newUser = new User();
 
@@ -120,13 +121,21 @@ class UsersController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
+
+
             $newUser = $form->getData();
-            $newUser
-                ->setCreateat(new \DateTime())
-                ->setModifyat(new \DateTime());
-            $manager->persist($newUser);
-            $manager->flush();
-            return $this->redirectToRoute('home'); //TODO
+            //verif pseudo unique
+            if (count($userRepository->findByPseundo($newUser->pseudo))<1) {
+                $newUser
+                    ->setCreateat(new \DateTime())
+                    ->setModifyat(new \DateTime());
+                $manager->persist($newUser);
+                $manager->flush();
+            }else{
+
+                //TODO // nom de pseudo déja pris
+            }
+            return $this->redirectToRoute('home'); //TODO faire mieux
         }
         $forms[0] = $form->createView();
         return $this->render('users/view.html.twig', [

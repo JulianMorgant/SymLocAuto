@@ -85,9 +85,15 @@ class User
      */
     private $consumers;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Annonce", mappedBy="userId", orphanRemoval=true)
+     */
+    private $annonces;
+
     public function __construct()
     {
         $this->consumers = new ArrayCollection();
+        $this->annonces = new ArrayCollection();
     }
 
     public function setId(int $id): self
@@ -200,6 +206,37 @@ class User
             // set the owning side to null (unless already changed)
             if ($consumer->getUserId() === $this) {
                 $consumer->setUserId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Annonce[]
+     */
+    public function getAnnonces(): Collection
+    {
+        return $this->annonces;
+    }
+
+    public function addAnnonce(Annonce $annonce): self
+    {
+        if (!$this->annonces->contains($annonce)) {
+            $this->annonces[] = $annonce;
+            $annonce->setUserId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAnnonce(Annonce $annonce): self
+    {
+        if ($this->annonces->contains($annonce)) {
+            $this->annonces->removeElement($annonce);
+            // set the owning side to null (unless already changed)
+            if ($annonce->getUserId() === $annonce) {
+                $annonce->setUserId(null);
             }
         }
 
